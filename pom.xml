@@ -8,7 +8,7 @@
   <artifactId>sastruts-core</artifactId>
   <packaging>jar</packaging>
   <name>sastruts-core</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>0.1.0-SNAPSHOT</version>
   <description></description>
   <url>https://github.com/codelibs/sastruts-core</url>
   <inceptionYear>2012</inceptionYear>
@@ -115,6 +115,12 @@
       <version>1.0</version>
       <type>jar</type>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.2</version>
+      <type>jar</type>
     </dependency>
   </dependencies>
 <!--
