@@ -37,7 +37,8 @@ import org.seasar.framework.util.StringUtil;
 import org.seasar.struts.util.ResponseUtil;
 
 public abstract class AbstractLoginAction implements Serializable {
-    private static final Logger logger = Logger.getLogger(AbstractLoginAction.class);
+    private static final Logger logger = Logger
+        .getLogger(AbstractLoginAction.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -139,7 +140,7 @@ public abstract class AbstractLoginAction implements Serializable {
     }
 
     protected String getDefaultPath() {
-        return "/index";
+        return "/index?redirect=true";
     }
 
     protected String getLoginPath() {
