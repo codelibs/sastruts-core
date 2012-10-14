@@ -32,13 +32,14 @@ import org.codelibs.sastruts.core.SSCConstants;
 import org.codelibs.sastruts.core.crypto.CachedCipher;
 import org.codelibs.sastruts.core.entity.UserInfo;
 import org.codelibs.sastruts.core.exception.LoginException;
+import org.codelibs.sastruts.core.form.AbstractLoginForm;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.struts.util.ResponseUtil;
 
 public abstract class AbstractLoginAction implements Serializable {
     private static final Logger logger = Logger
-        .getLogger(AbstractLoginAction.class);
+            .getLogger(AbstractLoginAction.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -48,32 +49,35 @@ public abstract class AbstractLoginAction implements Serializable {
     @Resource
     protected CachedCipher authCipher;
 
-    protected String doIndex(String loginType, String returnPath) {
+    protected String doIndex(final AbstractLoginForm form) {
         HttpSession session = request.getSession(false);
         // check login session
-        final Object obj =
-            session == null ? null : session
+        final Object obj = session == null ? null : session
                 .getAttribute(SSCConstants.LOGIN_INFO);
         if (obj instanceof UserInfo) {
             redirect(getAuthRootPath());
             return null;
         }
 
-        if ("logout".equals(loginType)) {
+        String params = null;
+        if ("forbidden".equals(form.type)) {
+            // invalid user
             if (logger.isInfoEnabled()) {
-                logger
-                    .log("ISSC0001", new Object[] { request.getRemoteUser() });
+                logger.log("ISSC0001", new Object[] { request.getRemoteUser() });
             }
             if (session != null) {
-                session.invalidate();
+                session = invalidateSession(session);
             }
-            return getDefaultPath();
+            params = "msgs=error.login_error";
         }
 
-        session = request.getSession();
+        if (session == null) {
+            session = request.getSession();
+        }
+
         String path;
-        if (StringUtil.isNotBlank(returnPath)) {
-            final String value = authCipher.decryptoText(returnPath);
+        if (StringUtil.isNotBlank(form.returnPath)) {
+            final String value = authCipher.decryptoText(form.returnPath);
             final int idx = value.indexOf('|');
             if (idx >= 0) {
                 path = value.substring(idx + 1);
@@ -86,26 +90,15 @@ public abstract class AbstractLoginAction implements Serializable {
             session.removeAttribute(SSCConstants.RETURN_PATH);
         }
 
-        return getLoginPath();
+        return getLoginPath(params);
     }
 
-    protected String doLogin() {
+    protected String doLogin(final AbstractLoginForm form) {
         final HttpSession oldSession = request.getSession();
 
-        final Map<String, Object> sessionObjMap = new HashMap<String, Object>();
-        final Enumeration<String> e = oldSession.getAttributeNames();
-        while (e.hasMoreElements()) {
-            final String name = e.nextElement();
-            sessionObjMap.put(name, oldSession.getAttribute(name));
-        }
-        oldSession.invalidate();
+        final HttpSession session = invalidateSession(oldSession);
 
-        sessionObjMap.remove(Globals.MESSAGE_KEY);
-
-        final HttpSession session = request.getSession();
-        for (final Map.Entry<String, Object> entry : sessionObjMap.entrySet()) {
-            session.setAttribute(entry.getKey(), entry.getValue());
-        }
+        session.removeAttribute(Globals.MESSAGE_KEY);
 
         // create user info
         final UserInfo loginInfo = new UserInfo();
@@ -129,22 +122,45 @@ public abstract class AbstractLoginAction implements Serializable {
         return null;
     }
 
-    protected String doLogout() {
+    private HttpSession invalidateSession(final HttpSession oldSession) {
+        final Map<String, Object> sessionObjMap = new HashMap<String, Object>();
+        @SuppressWarnings("unchecked")
+        final Enumeration<String> e = oldSession.getAttributeNames();
+        while (e.hasMoreElements()) {
+            final String name = e.nextElement();
+            sessionObjMap.put(name, oldSession.getAttribute(name));
+        }
+        oldSession.invalidate();
+
+        final HttpSession session = request.getSession();
+        for (final Map.Entry<String, Object> entry : sessionObjMap.entrySet()) {
+            session.setAttribute(entry.getKey(), entry.getValue());
+        }
+        return session;
+    }
+
+    protected String doLogout(final AbstractLoginForm form) {
         if (logger.isInfoEnabled()) {
             logger.log("ISSC0003", new Object[] { request.getRemoteUser() });
         }
         final HttpSession session = request.getSession();
         session.invalidate();
 
-        return getLoginPath();
+        return getLoginPath(null);
     }
 
     protected String getDefaultPath() {
         return "/index?redirect=true";
     }
 
-    protected String getLoginPath() {
-        return "login?redirect=true";
+    protected String getLoginPath(final String params) {
+        final StringBuilder buf = new StringBuilder();
+        buf.append("login?");
+        if (params != null && params.length() > 0) {
+            buf.append(params).append('&');
+        }
+        buf.append("redirect=true");
+        return buf.toString();
     }
 
     protected String getAuthRootPath() {
