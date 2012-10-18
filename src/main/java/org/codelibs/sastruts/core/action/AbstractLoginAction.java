@@ -53,7 +53,7 @@ public abstract class AbstractLoginAction implements Serializable {
         // check login session
         final Object obj =
             session == null ? null : session
-                .getAttribute(SSCConstants.LOGIN_INFO);
+                .getAttribute(SSCConstants.USER_INFO);
         if (obj instanceof UserInfo) {
             redirect(getAuthRootPath());
             return null;
@@ -110,7 +110,7 @@ public abstract class AbstractLoginAction implements Serializable {
         // create user info
         final UserInfo loginInfo = new UserInfo();
         loginInfo.setUsername(request.getRemoteUser());
-        session.setAttribute(SSCConstants.LOGIN_INFO, loginInfo);
+        session.setAttribute(SSCConstants.USER_INFO, loginInfo);
 
         String returnPath;
         if (logger.isInfoEnabled()) {
