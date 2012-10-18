@@ -86,8 +86,8 @@ public class AuthFilter implements Filter {
             if (matcher.matches()) {
                 // require authentication
                 boolean redirectLogin = false;
-                final Object obj = req.getSession().getAttribute(
-                        SSCConstants.LOGIN_INFO);
+                final Object obj =
+                    req.getSession().getAttribute(SSCConstants.USER_INFO);
                 if (obj == null || !(obj instanceof UserInfo)) {
                     redirectLogin = true;
                 }
