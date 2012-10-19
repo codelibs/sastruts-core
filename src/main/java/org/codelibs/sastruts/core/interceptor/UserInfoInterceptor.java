@@ -23,12 +23,13 @@ import javax.servlet.http.HttpSession;
 
 import org.aopalliance.intercept.MethodInvocation;
 import org.codelibs.sastruts.core.SSCConstants;
-import org.codelibs.sastruts.core.annotation.UserInfo;
+import org.codelibs.sastruts.core.annotation.User;
 import org.seasar.framework.aop.S2MethodInvocation;
 import org.seasar.framework.aop.interceptors.AbstractInterceptor;
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
 import org.seasar.framework.beans.factory.BeanDescFactory;
+import org.seasar.framework.util.FieldUtil;
 import org.seasar.struts.util.RequestUtil;
 
 /**
@@ -65,13 +66,13 @@ public class UserInfoInterceptor extends AbstractInterceptor {
             PropertyDesc propertyDesc = beanDesc.getPropertyDesc(i);
             Method readMethod = propertyDesc.getReadMethod();
             if (readMethod != null
-                && readMethod.isAnnotationPresent(UserInfo.class)) {
+                && readMethod.isAnnotationPresent(User.class)) {
                 propertyDesc.setValue(target, userInfoObj);
                 break;
             }
             Field field = propertyDesc.getField();
-            if (field != null && field.isAnnotationPresent(UserInfo.class)) {
-                propertyDesc.setValue(target, userInfoObj);
+            if (field != null && field.isAnnotationPresent(User.class)) {
+                FieldUtil.set(field, target, userInfoObj);
                 break;
             }
         }
