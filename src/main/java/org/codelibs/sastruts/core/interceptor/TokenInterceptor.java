@@ -30,6 +30,11 @@ import org.seasar.struts.util.RequestUtil;
  */
 public class TokenInterceptor extends AbstractInterceptor {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /*
      * (non-Javadoc)
      * 
@@ -38,15 +43,15 @@ public class TokenInterceptor extends AbstractInterceptor {
      * .MethodInvocation)
      */
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        Token token = invocation.getMethod().getAnnotation(Token.class);
+    public Object invoke(final MethodInvocation invocation) throws Throwable {
+        final Token token = invocation.getMethod().getAnnotation(Token.class);
         if (token != null) {
-            TokenProcessor processor = TokenProcessor.getInstance();
-            HttpServletRequest request = RequestUtil.getRequest();
+            final TokenProcessor processor = TokenProcessor.getInstance();
+            final HttpServletRequest request = RequestUtil.getRequest();
             if (token.save()) {
                 processor.saveToken(request);
             } else if (token.validate()
-                && !processor.isTokenValid(request, !token.keep())) {
+                    && !processor.isTokenValid(request, !token.keep())) {
                 processor.resetToken(request);
                 throw new ActionMessagesException("errors.token", new Object[0]);
             }

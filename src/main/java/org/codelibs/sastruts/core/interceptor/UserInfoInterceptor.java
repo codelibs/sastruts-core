@@ -39,6 +39,8 @@ import org.seasar.struts.util.RequestUtil;
  */
 public class UserInfoInterceptor extends AbstractInterceptor {
 
+    private static final long serialVersionUID = 1L;
+
     /*
      * (non-Javadoc)
      * 
@@ -47,30 +49,31 @@ public class UserInfoInterceptor extends AbstractInterceptor {
      * .MethodInvocation)
      */
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        HttpServletRequest request = RequestUtil.getRequest();
-        HttpSession session = request.getSession(false);
+    public Object invoke(final MethodInvocation invocation) throws Throwable {
+        final HttpServletRequest request = RequestUtil.getRequest();
+        final HttpSession session = request.getSession(false);
         if (session == null) {
             return invocation.proceed();
         }
-        Object userInfoObj = session.getAttribute(SSCConstants.USER_INFO);
+        final Object userInfoObj = session.getAttribute(SSCConstants.USER_INFO);
         if (userInfoObj == null) {
             return invocation.proceed();
         }
 
-        Object target = invocation.getThis();
-        Class<?> clazz = ((S2MethodInvocation) invocation).getTargetClass();
-        BeanDesc beanDesc = BeanDescFactory.getBeanDesc(clazz);
-        int size = beanDesc.getPropertyDescSize();
+        final Object target = invocation.getThis();
+        final Class<?> clazz = ((S2MethodInvocation) invocation)
+                .getTargetClass();
+        final BeanDesc beanDesc = BeanDescFactory.getBeanDesc(clazz);
+        final int size = beanDesc.getPropertyDescSize();
         for (int i = 0; i < size; i++) {
-            PropertyDesc propertyDesc = beanDesc.getPropertyDesc(i);
-            Method readMethod = propertyDesc.getReadMethod();
+            final PropertyDesc propertyDesc = beanDesc.getPropertyDesc(i);
+            final Method readMethod = propertyDesc.getReadMethod();
             if (readMethod != null
-                && readMethod.isAnnotationPresent(User.class)) {
+                    && readMethod.isAnnotationPresent(User.class)) {
                 propertyDesc.setValue(target, userInfoObj);
                 break;
             }
-            Field field = propertyDesc.getField();
+            final Field field = propertyDesc.getField();
             if (field != null && field.isAnnotationPresent(User.class)) {
                 FieldUtil.set(field, target, userInfoObj);
                 break;

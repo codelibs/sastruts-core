@@ -51,8 +51,7 @@ public abstract class AbstractLoginAction implements Serializable {
     protected String doIndex(final AbstractLoginForm form) {
         HttpSession session = request.getSession(false);
         // check login session
-        final Object obj =
-            session == null ? null : session
+        final Object obj = session == null ? null : session
                 .getAttribute(SSCConstants.USER_INFO);
         if (obj instanceof UserInfo) {
             redirect(getAuthRootPath());

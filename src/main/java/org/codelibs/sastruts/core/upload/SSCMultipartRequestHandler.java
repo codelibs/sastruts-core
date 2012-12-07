@@ -50,14 +50,12 @@ public class SSCMultipartRequestHandler extends S2MultipartRequestHandler {
     @Override
     public void handleRequest(final HttpServletRequest request)
             throws ServletException {
-        final ModuleConfig ac =
-            (ModuleConfig) request.getAttribute(Globals.MODULE_KEY);
-        final FileCleaningTracker fileCleaningTracker =
-            FileCleanerCleanup.getFileCleaningTracker(ServletContextUtil
-                .getServletContext());
-        final DiskFileItemFactory fileItemFactory =
-            new DiskFileItemFactory((int) getSizeThreshold(ac), new File(
-                getRepositoryPath(ac)));
+        final ModuleConfig ac = (ModuleConfig) request
+                .getAttribute(Globals.MODULE_KEY);
+        final FileCleaningTracker fileCleaningTracker = FileCleanerCleanup
+                .getFileCleaningTracker(ServletContextUtil.getServletContext());
+        final DiskFileItemFactory fileItemFactory = new DiskFileItemFactory(
+                (int) getSizeThreshold(ac), new File(getRepositoryPath(ac)));
         request.setAttribute("fileItemFactory", fileItemFactory);
         fileItemFactory.setFileCleaningTracker(fileCleaningTracker);
         final ServletFileUpload upload = new ServletFileUpload(fileItemFactory);
@@ -71,8 +69,8 @@ public class SSCMultipartRequestHandler extends S2MultipartRequestHandler {
             items = upload.parseRequest(request);
         } catch (final SizeLimitExceededException e) {
             request.setAttribute(
-                MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED,
-                Boolean.TRUE);
+                    MultipartRequestHandler.ATTRIBUTE_MAX_LENGTH_EXCEEDED,
+                    Boolean.TRUE);
             request.setAttribute(SIZE_EXCEPTION_KEY, e);
             try {
                 final InputStream is = request.getInputStream();

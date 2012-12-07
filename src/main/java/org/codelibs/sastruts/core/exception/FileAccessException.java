@@ -23,20 +23,22 @@ package org.codelibs.sastruts.core.exception;
  */
 public class FileAccessException extends SSCRuntimeException {
 
-    public FileAccessException(String messageCode, Object[] args,
-            Throwable cause) {
+    private static final long serialVersionUID = 1L;
+
+    public FileAccessException(final String messageCode, final Object[] args,
+            final Throwable cause) {
         super(messageCode, args, cause);
     }
 
-    public FileAccessException(String messageCode, Object[] args) {
+    public FileAccessException(final String messageCode, final Object[] args) {
         super(messageCode, args);
     }
 
-    public FileAccessException(String messageCode, Throwable cause) {
+    public FileAccessException(final String messageCode, final Throwable cause) {
         super(messageCode, cause);
     }
 
-    public FileAccessException(String messageCode) {
+    public FileAccessException(final String messageCode) {
         super(messageCode);
     }
 

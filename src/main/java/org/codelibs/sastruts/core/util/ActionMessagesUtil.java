@@ -142,9 +142,9 @@ public final class ActionMessagesUtil {
      *            エラーメッセージ
      * 
      */
-    public static void saveErrors(HttpServletRequest request,
-            ActionMessages errors) {
-        if ((errors == null) || errors.isEmpty()) {
+    public static void saveErrors(final HttpServletRequest request,
+            final ActionMessages errors) {
+        if (errors == null || errors.isEmpty()) {
             request.removeAttribute(Globals.ERROR_KEY);
             return;
         }
@@ -160,8 +160,9 @@ public final class ActionMessagesUtil {
      *            エラーメッセージ
      * 
      */
-    public static void saveErrors(HttpSession session, ActionMessages errors) {
-        if ((errors == null) || errors.isEmpty()) {
+    public static void saveErrors(final HttpSession session,
+            final ActionMessages errors) {
+        if (errors == null || errors.isEmpty()) {
             session.removeAttribute(Globals.ERROR_KEY);
             return;
         }
@@ -177,9 +178,9 @@ public final class ActionMessagesUtil {
      *            メッセージ
      * 
      */
-    public static void saveMessages(HttpServletRequest request,
-            ActionMessages messages) {
-        if ((messages == null) || messages.isEmpty()) {
+    public static void saveMessages(final HttpServletRequest request,
+            final ActionMessages messages) {
+        if (messages == null || messages.isEmpty()) {
             request.removeAttribute(Globals.MESSAGE_KEY);
             return;
         }
@@ -195,8 +196,9 @@ public final class ActionMessagesUtil {
      *            メッセージ
      * 
      */
-    public static void saveMessages(HttpSession session, ActionMessages messages) {
-        if ((messages == null) || messages.isEmpty()) {
+    public static void saveMessages(final HttpSession session,
+            final ActionMessages messages) {
+        if (messages == null || messages.isEmpty()) {
             session.removeAttribute(Globals.MESSAGE_KEY);
             return;
         }
@@ -212,13 +214,13 @@ public final class ActionMessagesUtil {
      *            エラーメッセージ
      * 
      */
-    public static void addErrors(HttpServletRequest request,
-            ActionMessages errors) {
+    public static void addErrors(final HttpServletRequest request,
+            final ActionMessages errors) {
         if (errors == null) {
             return;
         }
-        ActionMessages requestErrors =
-            (ActionMessages) request.getAttribute(Globals.ERROR_KEY);
+        ActionMessages requestErrors = (ActionMessages) request
+                .getAttribute(Globals.ERROR_KEY);
         if (requestErrors == null) {
             requestErrors = new ActionMessages();
         }
@@ -235,12 +237,13 @@ public final class ActionMessagesUtil {
      *            エラーメッセージ
      * 
      */
-    public static void addErrors(HttpSession session, ActionMessages errors) {
+    public static void addErrors(final HttpSession session,
+            final ActionMessages errors) {
         if (errors == null) {
             return;
         }
-        ActionMessages sessionErrors =
-            (ActionMessages) session.getAttribute(Globals.ERROR_KEY);
+        ActionMessages sessionErrors = (ActionMessages) session
+                .getAttribute(Globals.ERROR_KEY);
         if (sessionErrors == null) {
             sessionErrors = new ActionMessages();
         }
@@ -256,9 +259,9 @@ public final class ActionMessagesUtil {
      * @return エラーメッセージがあるかどうか
      * @since 1.0.4
      */
-    public static boolean hasErrors(HttpServletRequest request) {
-        ActionMessages errors =
-            (ActionMessages) request.getAttribute(Globals.ERROR_KEY);
+    public static boolean hasErrors(final HttpServletRequest request) {
+        final ActionMessages errors = (ActionMessages) request
+                .getAttribute(Globals.ERROR_KEY);
         if (errors != null && !errors.isEmpty()) {
             return true;
         }
@@ -274,13 +277,13 @@ public final class ActionMessagesUtil {
      *            メッセージ
      * 
      */
-    public static void addMessages(HttpServletRequest request,
-            ActionMessages messages) {
+    public static void addMessages(final HttpServletRequest request,
+            final ActionMessages messages) {
         if (messages == null) {
             return;
         }
-        ActionMessages requestMessages =
-            (ActionMessages) request.getAttribute(Globals.MESSAGE_KEY);
+        ActionMessages requestMessages = (ActionMessages) request
+                .getAttribute(Globals.MESSAGE_KEY);
         if (requestMessages == null) {
             requestMessages = new ActionMessages();
         }
@@ -297,12 +300,13 @@ public final class ActionMessagesUtil {
      *            メッセージ
      * 
      */
-    public static void addMessages(HttpSession session, ActionMessages messages) {
+    public static void addMessages(final HttpSession session,
+            final ActionMessages messages) {
         if (messages == null) {
             return;
         }
-        ActionMessages sessionMessages =
-            (ActionMessages) session.getAttribute(Globals.MESSAGE_KEY);
+        ActionMessages sessionMessages = (ActionMessages) session
+                .getAttribute(Globals.MESSAGE_KEY);
         if (sessionMessages == null) {
             sessionMessages = new ActionMessages();
         }

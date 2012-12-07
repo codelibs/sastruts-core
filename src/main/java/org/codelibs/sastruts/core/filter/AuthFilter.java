@@ -52,6 +52,7 @@ public class AuthFilter implements Filter {
 
     protected String adminRole;
 
+    @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         final String value = filterConfig.getInitParameter("urlPatterns");
         if (value != null) {
@@ -68,11 +69,13 @@ public class AuthFilter implements Filter {
         loginPath = filterConfig.getInitParameter("loginPath");
     }
 
+    @Override
     public void destroy() {
         urlPatternList = null;
         cipherName = null;
     }
 
+    @Override
     public void doFilter(final ServletRequest request,
             final ServletResponse response, final FilterChain chain)
             throws IOException, ServletException {
@@ -85,8 +88,8 @@ public class AuthFilter implements Filter {
             if (matcher.matches()) {
                 // require authentication
                 boolean redirectLogin = false;
-                final Object obj =
-                    req.getSession().getAttribute(SSCConstants.USER_INFO);
+                final Object obj = req.getSession().getAttribute(
+                        SSCConstants.USER_INFO);
                 if (obj == null || !(obj instanceof UserInfo)) {
                     redirectLogin = true;
                 }

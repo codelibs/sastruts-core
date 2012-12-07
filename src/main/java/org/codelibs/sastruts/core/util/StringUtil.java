@@ -36,10 +36,10 @@ public class StringUtil extends org.seasar.framework.util.StringUtil {
     protected StringUtil() {
     }
 
-    public static String newString(byte[] bytes, String charsetName) {
+    public static String newString(final byte[] bytes, final String charsetName) {
         try {
             return new String(bytes, charsetName);
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             throw new UnsupportedEncodingRuntimeException(e);
         }
     }

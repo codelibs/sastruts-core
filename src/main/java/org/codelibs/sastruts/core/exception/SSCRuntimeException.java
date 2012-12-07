@@ -27,20 +27,20 @@ public class SSCRuntimeException extends SRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public SSCRuntimeException(String messageCode, Object[] args,
-            Throwable cause) {
+    public SSCRuntimeException(final String messageCode, final Object[] args,
+            final Throwable cause) {
         super(messageCode, args, cause);
     }
 
-    public SSCRuntimeException(String messageCode, Object[] args) {
+    public SSCRuntimeException(final String messageCode, final Object[] args) {
         super(messageCode, args);
     }
 
-    public SSCRuntimeException(String messageCode, Throwable cause) {
+    public SSCRuntimeException(final String messageCode, final Throwable cause) {
         super(messageCode, new Object[] {}, cause);
     }
 
-    public SSCRuntimeException(String messageCode) {
+    public SSCRuntimeException(final String messageCode) {
         super(messageCode);
     }
 }

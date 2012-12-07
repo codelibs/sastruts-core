@@ -31,15 +31,19 @@ import org.apache.struts.action.ActionServlet;
  */
 public class SSCActionServlet extends ActionServlet {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
-    protected void doDelete(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(final HttpServletRequest request,
+            final HttpServletResponse response) throws ServletException,
+            IOException {
         process(request, response);
     }
 
     @Override
-    protected void doPut(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(final HttpServletRequest request,
+            final HttpServletResponse response) throws ServletException,
+            IOException {
         process(request, response);
     }
 

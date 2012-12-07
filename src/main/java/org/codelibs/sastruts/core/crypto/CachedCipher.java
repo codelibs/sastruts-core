@@ -56,9 +56,9 @@ public class CachedCipher {
         byte[] encrypted;
         try {
             encrypted = cipher.doFinal(data);
-        } catch (IllegalBlockSizeException e) {
+        } catch (final IllegalBlockSizeException e) {
             throw new IllegalBlockSizeRuntimeException(e);
-        } catch (BadPaddingException e) {
+        } catch (final BadPaddingException e) {
             throw new BadPaddingRuntimeException(e);
         } finally {
             offerEncryptoCipher(cipher);
@@ -79,9 +79,9 @@ public class CachedCipher {
         byte[] decrypted;
         try {
             decrypted = cipher.doFinal(data);
-        } catch (IllegalBlockSizeException e) {
+        } catch (final IllegalBlockSizeException e) {
             throw new IllegalBlockSizeRuntimeException(e);
-        } catch (BadPaddingException e) {
+        } catch (final BadPaddingException e) {
             throw new BadPaddingRuntimeException(e);
         } finally {
             offerDecryptoCipher(cipher);
@@ -100,16 +100,16 @@ public class CachedCipher {
     protected Cipher pollEncryptoCipher() {
         Cipher cipher = encryptoQueue.poll();
         if (cipher == null) {
-            final SecretKeySpec sksSpec =
-                new SecretKeySpec(key.getBytes(), algorithm);
+            final SecretKeySpec sksSpec = new SecretKeySpec(key.getBytes(),
+                    algorithm);
             try {
                 cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.ENCRYPT_MODE, sksSpec);
-            } catch (InvalidKeyException e) {
+            } catch (final InvalidKeyException e) {
                 throw new InvalidKeyRuntimeException(e);
-            } catch (NoSuchAlgorithmException e) {
+            } catch (final NoSuchAlgorithmException e) {
                 throw new NoSuchAlgorithmRuntimeException(e);
-            } catch (NoSuchPaddingException e) {
+            } catch (final NoSuchPaddingException e) {
                 throw new NoSuchPaddingRuntimeException(e);
             }
         }
@@ -123,16 +123,16 @@ public class CachedCipher {
     protected Cipher pollDecryptoCipher() {
         Cipher cipher = decryptoQueue.poll();
         if (cipher == null) {
-            final SecretKeySpec sksSpec =
-                new SecretKeySpec(key.getBytes(), algorithm);
+            final SecretKeySpec sksSpec = new SecretKeySpec(key.getBytes(),
+                    algorithm);
             try {
                 cipher = Cipher.getInstance(algorithm);
                 cipher.init(Cipher.DECRYPT_MODE, sksSpec);
-            } catch (InvalidKeyException e) {
+            } catch (final InvalidKeyException e) {
                 throw new InvalidKeyRuntimeException(e);
-            } catch (NoSuchAlgorithmException e) {
+            } catch (final NoSuchAlgorithmException e) {
                 throw new NoSuchAlgorithmRuntimeException(e);
-            } catch (NoSuchPaddingException e) {
+            } catch (final NoSuchPaddingException e) {
                 throw new NoSuchPaddingRuntimeException(e);
             }
         }

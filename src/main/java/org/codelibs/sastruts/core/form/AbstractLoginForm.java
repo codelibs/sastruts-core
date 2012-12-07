@@ -22,6 +22,9 @@ import java.io.Serializable;
  * 
  */
 public abstract class AbstractLoginForm implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     public String returnPath;
 
     public String type;

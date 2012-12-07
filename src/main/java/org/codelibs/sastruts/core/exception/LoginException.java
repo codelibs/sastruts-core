@@ -21,6 +21,11 @@ package org.codelibs.sastruts.core.exception;
  */
 public class LoginException extends SSCRuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     public LoginException(final String messageCode, final Object[] args,
             final Throwable cause) {
         super(messageCode, args, cause);
