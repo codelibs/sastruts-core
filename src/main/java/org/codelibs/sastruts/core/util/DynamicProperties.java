@@ -47,7 +47,7 @@ public class DynamicProperties extends Properties {
 
     protected volatile long lastModified = 0L;
 
-    protected File propertiesFile;
+    protected volatile File propertiesFile;
 
     protected volatile Properties properties;
 
@@ -157,8 +157,10 @@ public class DynamicProperties extends Properties {
 
     @Override
     public Object clone() {
-        // TODO
-        throw new UnsupportedOperationException("Unsupported operation.");
+        final DynamicProperties dynamicProperties = new DynamicProperties(
+                propertiesFile.getAbsolutePath());
+        dynamicProperties.checkInterval = checkInterval;
+        return dynamicProperties;
     }
 
     @Override

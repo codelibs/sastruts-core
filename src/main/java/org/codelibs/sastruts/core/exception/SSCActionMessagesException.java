@@ -25,22 +25,27 @@ import org.seasar.struts.exception.ActionMessagesException;
  */
 public class SSCActionMessagesException extends ActionMessagesException {
 
-    public SSCActionMessagesException(String key, boolean resource) {
+    /**
+     * A default serial version uid.
+     */
+    private static final long serialVersionUID = 1L;
+
+    public SSCActionMessagesException(final String key, final boolean resource) {
         super(key, resource);
     }
 
-    public SSCActionMessagesException(String key, Object... values) {
+    public SSCActionMessagesException(final String key, final Object... values) {
         super(key, values);
     }
 
-    public SSCActionMessagesException(Throwable cause, String key,
-            boolean resource) {
+    public SSCActionMessagesException(final Throwable cause, final String key,
+            final boolean resource) {
         super(key, resource);
         initCause(cause);
     }
 
-    public SSCActionMessagesException(Throwable cause, String key,
-            Object... values) {
+    public SSCActionMessagesException(final Throwable cause, final String key,
+            final Object... values) {
         super(key, values);
         initCause(cause);
     }

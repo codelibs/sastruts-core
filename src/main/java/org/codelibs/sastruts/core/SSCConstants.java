@@ -21,4 +21,6 @@ public class SSCConstants {
 
     public static final String RETURN_PATH = "ReturnPath";
 
+    protected SSCConstants() {
+    }
 }

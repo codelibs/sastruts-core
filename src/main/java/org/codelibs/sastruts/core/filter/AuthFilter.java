@@ -90,7 +90,7 @@ public class AuthFilter implements Filter {
                 boolean redirectLogin = false;
                 final Object obj = req.getSession().getAttribute(
                         SSCConstants.USER_INFO);
-                if (obj == null || !(obj instanceof UserInfo)) {
+                if (!(obj instanceof UserInfo)) {
                     redirectLogin = true;
                 }
                 if (redirectLogin) {

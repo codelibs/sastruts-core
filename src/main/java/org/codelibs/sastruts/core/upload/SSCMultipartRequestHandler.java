@@ -78,7 +78,7 @@ public class SSCMultipartRequestHandler extends S2MultipartRequestHandler {
                     final byte[] buf = new byte[1024];
                     @SuppressWarnings("unused")
                     int len = 0;
-                    while ((len = is.read(buf)) != -1) {
+                    while ((len = is.read(buf)) != -1) { // NOPMD
                     }
                 } catch (final Exception ignore) {
                 } finally {
