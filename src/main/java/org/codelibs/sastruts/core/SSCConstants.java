@@ -15,7 +15,9 @@
  */
 package org.codelibs.sastruts.core;
 
-public class SSCConstants {
+import org.codelibs.core.ClConstants;
+
+public class SSCConstants extends ClConstants {
 
     public static final String USER_INFO = "LoginInfo";
 

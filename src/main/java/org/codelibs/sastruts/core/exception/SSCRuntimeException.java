@@ -15,7 +15,7 @@
  */
 package org.codelibs.sastruts.core.exception;
 
-import org.seasar.framework.exception.SRuntimeException;
+import org.codelibs.core.exception.ClRuntimeException;
 
 /**
  * Base exception class for SAStruts Core.
@@ -23,7 +23,7 @@ import org.seasar.framework.exception.SRuntimeException;
  * @author shinsuke
  * 
  */
-public class SSCRuntimeException extends SRuntimeException {
+public class SSCRuntimeException extends ClRuntimeException {
 
     private static final long serialVersionUID = 1L;
 

@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
+import org.codelibs.core.crypto.CachedCipher;
 import org.codelibs.sastruts.core.SSCConstants;
-import org.codelibs.sastruts.core.crypto.CachedCipher;
 import org.codelibs.sastruts.core.entity.UserInfo;
 import org.codelibs.sastruts.core.exception.LoginException;
 import org.codelibs.sastruts.core.form.AbstractLoginForm;
