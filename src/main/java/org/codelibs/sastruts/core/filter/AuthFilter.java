@@ -52,9 +52,11 @@ public class AuthFilter implements Filter {
 
     protected String adminRole;
 
+    protected boolean useSecureLogin;
+
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
-        final String value = filterConfig.getInitParameter("urlPatterns");
+        String value = filterConfig.getInitParameter("urlPatterns");
         if (value != null) {
             final String[] urlPatterns = value.split(",");
             for (final String urlPattern : urlPatterns) {
@@ -66,7 +68,15 @@ public class AuthFilter implements Filter {
         if (StringUtil.isBlank(cipherName)) {
             cipherName = "authCipher";
         }
+
         loginPath = filterConfig.getInitParameter("loginPath");
+
+        value = filterConfig.getInitParameter("useSecureLogin");
+        if (StringUtil.isNotBlank(value)) {
+            useSecureLogin = Boolean.parseBoolean(value);
+        } else {
+            useSecureLogin = false;
+        }
     }
 
     @Override
@@ -86,6 +96,15 @@ public class AuthFilter implements Filter {
         for (final Pattern pattern : urlPatternList) {
             final Matcher matcher = pattern.matcher(uri);
             if (matcher.matches()) {
+                if (useSecureLogin) {
+                    final String requestURL = req.getRequestURL().toString();
+                    if (requestURL.startsWith("http:")) {
+                        // redirect
+                        res.sendRedirect(requestURL.replaceFirst("^http:",
+                                "https:"));
+                        return;
+                    }
+                }
                 // require authentication
                 boolean redirectLogin = false;
                 final Object obj = req.getSession().getAttribute(
@@ -101,7 +120,7 @@ public class AuthFilter implements Filter {
 
                     String encoding = request.getCharacterEncoding();
                     if (encoding == null) {
-                        encoding = "UTF-8";
+                        encoding = SSCConstants.UTF_8;
                     }
 
                     final StringBuilder urlBuf = new StringBuilder(1000);
