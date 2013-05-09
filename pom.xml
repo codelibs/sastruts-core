@@ -4,7 +4,7 @@
   <artifactId>sastruts-core</artifactId>
   <packaging>jar</packaging>
   <name>sastruts-core</name>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.1.1</version>
   <description />
   <url>https://github.com/codelibs/sastruts-core</url>
   <inceptionYear>2012</inceptionYear>
