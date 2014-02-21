@@ -4,7 +4,7 @@
   <artifactId>sastruts-core</artifactId>
   <packaging>jar</packaging>
   <name>sastruts-core</name>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <description />
   <url>https://github.com/codelibs/sastruts-core</url>
   <inceptionYear>2012</inceptionYear>
@@ -39,8 +39,8 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
+            <source>1.7</source>
+            <target>1.7</target>
             <encoding>UTF-8</encoding>
           </configuration>
         </plugin>
@@ -149,13 +149,13 @@
     <dependency>
       <groupId>org.codelibs</groupId>
       <artifactId>corelib</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.2.2</version>
+      <version>1.2.2.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
