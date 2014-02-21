@@ -29,8 +29,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codelibs.core.CoreLibConstants;
 import org.codelibs.core.crypto.CachedCipher;
 import org.codelibs.sastruts.core.SSCConstants;
 import org.codelibs.sastruts.core.entity.UserInfo;
@@ -44,15 +46,22 @@ import org.seasar.framework.util.StringUtil;
  * 
  */
 public class AuthFilter implements Filter {
+
+    private static final String DEFAULT_LOGIN_PATH = "/login/";
+
+    private static final String HTTPS = "https:";
+
+    private static final String HTTP = "http:";
+
     public List<Pattern> urlPatternList = new ArrayList<Pattern>();
 
     protected String cipherName;
 
     protected String loginPath;
 
-    protected String adminRole;
-
     protected boolean useSecureLogin;
+
+    protected String returnPathName;
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
@@ -77,6 +86,11 @@ public class AuthFilter implements Filter {
         } else {
             useSecureLogin = false;
         }
+
+        returnPathName = filterConfig.getInitParameter("returnPathName");
+        if (StringUtil.isBlank(returnPathName)) {
+            returnPathName = "returnPath";
+        }
     }
 
     @Override
@@ -92,27 +106,25 @@ public class AuthFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse res = (HttpServletResponse) response;
         final String uri = req.getRequestURI();
-        final CachedCipher fessCipher = getCachedCipher();
+        final CachedCipher cipher = getCachedCipher();
         for (final Pattern pattern : urlPatternList) {
             final Matcher matcher = pattern.matcher(uri);
             if (matcher.matches()) {
                 if (useSecureLogin) {
                     final String requestURL = req.getRequestURL().toString();
-                    if (requestURL.startsWith("http:")) {
+                    if (requestURL.startsWith(HTTP)) {
                         // redirect
-                        res.sendRedirect(requestURL.replaceFirst("^http:",
-                                "https:"));
+                        res.sendRedirect(requestURL.replaceFirst(HTTP, HTTPS));
                         return;
                     }
                 }
+
                 // require authentication
-                boolean redirectLogin = false;
-                final Object obj = req.getSession().getAttribute(
-                        SSCConstants.USER_INFO);
-                if (!(obj instanceof UserInfo)) {
-                    redirectLogin = true;
-                }
-                if (redirectLogin) {
+                final UserInfo userInfo = getUserInfo(req);
+                if (userInfo != null) {
+                    chain.doFilter(new AuthHttpServletRequest(req, userInfo),
+                            response);
+                } else {
                     final StringBuilder buf = new StringBuilder(256);
                     buf.append(System.currentTimeMillis());
                     buf.append('|');
@@ -120,7 +132,7 @@ public class AuthFilter implements Filter {
 
                     String encoding = request.getCharacterEncoding();
                     if (encoding == null) {
-                        encoding = SSCConstants.UTF_8;
+                        encoding = CoreLibConstants.UTF_8;
                     }
 
                     final StringBuilder urlBuf = new StringBuilder(1000);
@@ -129,26 +141,56 @@ public class AuthFilter implements Filter {
                         if (contextPath != null) {
                             urlBuf.append(contextPath);
                         }
-                        urlBuf.append("/login/");
+                        urlBuf.append(DEFAULT_LOGIN_PATH);
                     } else {
                         urlBuf.append(res.encodeURL(loginPath));
                     }
-                    urlBuf.append("?returnPath=");
+                    urlBuf.append('?').append(returnPathName).append('=');
                     urlBuf.append(URLEncoder.encode(
-                            fessCipher.encryptoText(buf.toString()), encoding));
+                            cipher.encryptoText(buf.toString()), encoding));
 
                     // redirect
                     res.sendRedirect(urlBuf.toString());
-                    return;
                 }
+                return;
             }
         }
 
         chain.doFilter(request, response);
     }
 
+    protected UserInfo getUserInfo(final HttpServletRequest req) {
+        final Object obj = req.getSession()
+                .getAttribute(SSCConstants.USER_INFO);
+        if (obj instanceof UserInfo) {
+            return (UserInfo) obj;
+        }
+        return null;
+    }
+
     protected CachedCipher getCachedCipher() {
         return SingletonS2Container.getComponent(cipherName);
     }
 
+    protected static class AuthHttpServletRequest extends
+            HttpServletRequestWrapper {
+        protected UserInfo userInfo;
+
+        protected AuthHttpServletRequest(HttpServletRequest request,
+                UserInfo userInfo) {
+            super(request);
+            this.userInfo = userInfo;
+        }
+
+        @Override
+        public String getRemoteUser() {
+            return userInfo.getUsername();
+        }
+
+        @Override
+        public boolean isUserInRole(String role) {
+            return userInfo.isUserInRole(role);
+        }
+
+    }
 }

@@ -16,6 +16,7 @@
 package org.codelibs.sastruts.core.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class UserInfo implements Serializable {
 
@@ -23,11 +24,33 @@ public class UserInfo implements Serializable {
 
     private String username;
 
+    protected Set<String> roleSet;
+
+    public Set<String> getRoleSet() {
+        return roleSet;
+    }
+
+    public void setRoleSet(Set<String> roleSet) {
+        this.roleSet = roleSet;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(final String username) {
         this.username = username;
+    }
+
+    public boolean isUserInRole(String role) {
+        if (roleSet != null) {
+            return roleSet.contains(role);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo [username=" + username + ", roleSet=" + roleSet + "]";
     }
 }

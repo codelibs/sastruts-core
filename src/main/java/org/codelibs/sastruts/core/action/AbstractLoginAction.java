@@ -82,7 +82,7 @@ public abstract class AbstractLoginAction implements Serializable {
                 path = value.substring(idx + 1);
                 session.setAttribute(SSCConstants.RETURN_PATH, path);
             } else {
-                // invalid returnPath
+                // invalid returnPathName
                 session.removeAttribute(SSCConstants.RETURN_PATH);
             }
         } else {
