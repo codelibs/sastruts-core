@@ -32,6 +32,7 @@ import org.codelibs.sastruts.core.SSCConstants;
 import org.codelibs.sastruts.core.entity.UserInfo;
 import org.codelibs.sastruts.core.exception.LoginException;
 import org.codelibs.sastruts.core.form.AbstractLoginForm;
+import org.codelibs.sastruts.core.util.ActivityUtil;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.StringUtil;
 import org.seasar.struts.util.ResponseUtil;
@@ -104,17 +105,16 @@ public abstract class AbstractLoginAction implements Serializable {
         loginInfo.setUsername(request.getRemoteUser());
         session.setAttribute(SSCConstants.USER_INFO, loginInfo);
 
-        String returnPath;
-        if (logger.isInfoEnabled()) {
-            logger.log("ISSC0002", new Object[] { request.getRemoteUser() });
-        }
-        returnPath = (String) session.getAttribute(SSCConstants.RETURN_PATH);
+        String returnPath = (String) session
+                .getAttribute(SSCConstants.RETURN_PATH);
         if (returnPath != null) {
             session.removeAttribute(SSCConstants.RETURN_PATH);
         } else {
             // admin page
             returnPath = getAuthRootPath();
         }
+
+        ActivityUtil.login(loginInfo.getUsername(), request);
 
         redirect(returnPath);
 
@@ -139,9 +139,8 @@ public abstract class AbstractLoginAction implements Serializable {
     }
 
     protected String doLogout(final AbstractLoginForm form) {
-        if (logger.isInfoEnabled()) {
-            logger.log("ISSC0003", new Object[] { request.getRemoteUser() });
-        }
+        ActivityUtil.login(request.getRemoteUser(), request);
+
         final HttpSession session = request.getSession();
         session.invalidate();
 

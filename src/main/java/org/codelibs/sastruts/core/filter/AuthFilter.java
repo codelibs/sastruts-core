@@ -36,6 +36,7 @@ import org.codelibs.core.CoreLibConstants;
 import org.codelibs.core.crypto.CachedCipher;
 import org.codelibs.sastruts.core.SSCConstants;
 import org.codelibs.sastruts.core.entity.UserInfo;
+import org.codelibs.sastruts.core.util.ActivityUtil;
 import org.seasar.framework.container.SingletonS2Container;
 import org.seasar.framework.util.StringUtil;
 
@@ -110,8 +111,8 @@ public class AuthFilter implements Filter {
         for (final Pattern pattern : urlPatternList) {
             final Matcher matcher = pattern.matcher(uri);
             if (matcher.matches()) {
+                final String requestURL = req.getRequestURL().toString();
                 if (useSecureLogin) {
-                    final String requestURL = req.getRequestURL().toString();
                     if (requestURL.startsWith(HTTP)) {
                         // redirect
                         res.sendRedirect(requestURL.replaceFirst(HTTP, HTTPS));
@@ -122,13 +123,14 @@ public class AuthFilter implements Filter {
                 // require authentication
                 final UserInfo userInfo = getUserInfo(req);
                 if (userInfo != null) {
+                    ActivityUtil.access(userInfo.getUsername(), req);
                     chain.doFilter(new AuthHttpServletRequest(req, userInfo),
                             response);
                 } else {
                     final StringBuilder buf = new StringBuilder(256);
                     buf.append(System.currentTimeMillis());
                     buf.append('|');
-                    buf.append(req.getRequestURL());
+                    buf.append(requestURL);
 
                     String encoding = request.getCharacterEncoding();
                     if (encoding == null) {
